@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS content_engagement_transformed (
     length_seconds UInt32,
     engagement_seconds UInt32,
     engagment_pct Float32,
-    transform_ts DateTime64(3)
+    ingest_from_kafka_ts DateTime64(3),
+    transform_ts DateTime64(3),
+    ts_diff UInt64
 ) ENGINE = MergeTree()
 ORDER BY (engagement_id);
 '''
@@ -45,7 +47,9 @@ SELECT
     content.length_seconds as length_seconds,
     engagement_events.duration_ms / 1000 as engagement_seconds,
     ROUND(engagement_seconds / content.length_seconds, 2) as engagment_pct,
-    now64(3) as transform_ts
+    engagement_events.ingest_from_kafka_ts as ingest_from_kafka_ts,
+    now64(3) as transform_ts,
+    (toUnixTimestamp64Milli(now64(3)) - toUnixTimestamp64Milli(engagement_events.ingest_from_kafka_ts)) / 1000 as ts_diff
 FROM engagement_events
 LEFT JOIN content ON engagement_events.content_id = content.id
 '''
@@ -64,7 +68,9 @@ SELECT
     length_seconds,
     engagement_seconds,
     engagment_pct,
-    transform_ts
+    ingest_from_kafka_ts,
+    transform_ts,
+    ts_diff
 FROM content_engagement_transformed
 '''
 
@@ -81,7 +87,9 @@ CREATE TABLE IF NOT EXISTS content_engagement_transformed_queue (
     length_seconds UInt32,
     engagement_seconds UInt32,
     engagment_pct Float32,
-    transform_ts DateTime64(3)
+    ingest_from_kafka_ts DateTime64(3),
+    transform_ts DateTime64(3),
+    ts_diff UInt64
 ) ENGINE = Kafka('redpanda-1:29092', 'ch.public.content_engagement_transformed', 'clickhouse_content_engagement_transformed_consumer_group')
 SETTINGS kafka_format = 'JSONEachRow';
 '''

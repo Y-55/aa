@@ -31,7 +31,7 @@ SELECT
     JSONExtractInt(after, 'length_seconds') as length_seconds,
     JSONExtractString(after, 'publish_ts') as publish_ts,
     op,
-    ts_ms
+    toDateTime(ts_ms / 1000) AS ingest_from_kafka_ts
 FROM content_queue;
 '''
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS content (
     length_seconds Nullable(Int32),
     publish_ts String,
     op String,
-    ts_ms UInt64
+    toDateTime DateTime64(3)
 ) ENGINE = MergeTree()
 ORDER BY (`id`) PRIMARY KEY (`id`);
 '''
@@ -74,7 +74,7 @@ SELECT
     JSONExtractString(after, 'device') as device,
     JSONExtractString(after, 'raw_payload') as raw_payload,
     op,
-    ts_ms
+    toDateTime(ts_ms / 1000) AS ingest_from_kafka_ts
 FROM engagement_events_queue
 '''
 
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS engagement_events (
     device Nullable(String),
     raw_payload Nullable(String),
     op String,
-    ts_ms UInt64
+    ingest_from_kafka_ts DateTime64(3)
 ) ENGINE = MergeTree()
 ORDER BY (`content_id`) PRIMARY KEY (`content_id`);
 '''
