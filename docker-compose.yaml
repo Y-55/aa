@@ -142,7 +142,10 @@ services:
     user: "101:101"
     environment:
       CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
-    # volumes:
+    volumes:
+      - ./volumes/clickhouse/data:/var/lib/clickhouse
+      - ./volumes/clickhouse/logs:/var/log/clickhouse-server
+      # - ./volumes/clickhouse/config:/etc/clickhouse-server
       # - ${PROJECT_PATH}/volumes/clickhouse/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
       # - ${PROJECT_PATH}/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
     ulimits:

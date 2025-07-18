@@ -54,6 +54,7 @@ def simulate_data_ingestion(n_content, n_events, n_pause_time_seconds, simulatio
         # Insert content data
         content_df.to_sql('content', engine, if_exists='append', index=False, method='multi')
         print(f"Inserted {n_content} rows into 'content' table.")
+        time.sleep(n_pause_time_seconds)
 
         # Generate dummy engagement_events data
         event_types = ['play', 'pause', 'finish', 'click']

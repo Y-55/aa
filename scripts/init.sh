@@ -7,4 +7,7 @@ poetry run python scripts/redpanda/init_postgres_connect.py
 echo "Initializing ClickHouse Landing Tables..."
 poetry run python scripts/clickhouse/init_landing_tables.py
 
+echo "Initializing ClickHouse Kafka Transformation..."
+poetry run python scripts/clickhouse/kafka_transformation.py
+
 echo "Done"

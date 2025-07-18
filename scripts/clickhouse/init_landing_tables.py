@@ -12,16 +12,10 @@ CLICKHOUSE_PASSWORD = os.getenv('CLICKHOUSE_PASSWORD')
 # Create Kafka engine table for content table
 CREATE_CONTENT_QUEUE_TABLE = '''
 CREATE TABLE IF NOT EXISTS content_queue (
-    `__op` String,
-    `__ts_ms` UInt64,
-    `__source` String,
-    `__ts` String,
-    `id` String,
-    `slug` String,
-    `title` String,
-    `content_type` String,
-    `length_seconds` Nullable(Int32),
-    `publish_ts` String
+    before String,
+    after String,
+    op String,
+    ts_ms UInt64
 ) ENGINE = Kafka('redpanda-1:29092', 'pg.public.content', 'clickhouse_content_consumer_group')
 SETTINGS kafka_format = 'JSONEachRow';
 '''
@@ -30,51 +24,39 @@ SETTINGS kafka_format = 'JSONEachRow';
 CREATE_CONTENT_MV = '''
 CREATE MATERIALIZED VIEW IF NOT EXISTS content_mv TO content AS
 SELECT 
-    `__op`,
-    `__ts_ms`,
-    `__source`,
-    `__ts`,
-    `id`,
-    `slug`,
-    `title`,
-    `content_type`,
-    `length_seconds`,
-    `publish_ts`
+    JSONExtractString(after, 'id') as id,
+    JSONExtractString(after, 'slug') as slug,
+    JSONExtractString(after, 'title') as title,
+    JSONExtractString(after, 'content_type') as content_type,
+    JSONExtractInt(after, 'length_seconds') as length_seconds,
+    JSONExtractString(after, 'publish_ts') as publish_ts,
+    op,
+    ts_ms
 FROM content_queue;
 '''
 
 # Create landing table for content
 CREATE_CONTENT_LANDING_TABLE = '''
 CREATE TABLE IF NOT EXISTS content (
-    `__op` String,
-    `__ts_ms` UInt64,
-    `__source` String,
-    `__ts` String,
-    `id` String,
-    `slug` String,
-    `title` String,
-    `content_type` String,
-    `length_seconds` Nullable(Int32),
-    `publish_ts` String
+    id UUID,
+    slug UUID,
+    title String,
+    content_type String,
+    length_seconds Nullable(Int32),
+    publish_ts String,
+    op String,
+    ts_ms UInt64
 ) ENGINE = MergeTree()
-ORDER BY (`id`, `__ts_ms`);
+ORDER BY (`id`) PRIMARY KEY (`id`);
 '''
 
 # Create Kafka engine table for engagement_events table
 CREATE_ENGAGEMENT_EVENTS_QUEUE_TABLE = '''
 CREATE TABLE IF NOT EXISTS engagement_events_queue (
-    `__op` String,
-    `__ts_ms` UInt64,
-    `__source` String,
-    `__ts` String,
-    `id` String,
-    `content_id` String,
-    `user_id` String,
-    `event_type` String,
-    `event_ts` String,
-    `duration_ms` Nullable(Int32),
-    `device` String,
-    `raw_payload` String
+    before String,
+    after String,
+    op String,
+    ts_ms UInt64
 ) ENGINE = Kafka('redpanda-1:29092', 'pg.public.engagement_events', 'clickhouse_engagement_consumer_group')
 SETTINGS kafka_format = 'JSONEachRow';
 '''
@@ -82,39 +64,35 @@ SETTINGS kafka_format = 'JSONEachRow';
 # Create materialized view to process engagement events data
 CREATE_ENGAGEMENT_EVENTS_MV = '''
 CREATE MATERIALIZED VIEW IF NOT EXISTS engagement_events_mv TO engagement_events AS
-SELECT 
-    `__op`,
-    `__ts_ms`,
-    `__source`,
-    `__ts`,
-    `id`,
-    `content_id`,
-    `user_id`,
-    `event_type`,
-    `event_ts`,
-    `duration_ms`,
-    `device`,
-    `raw_payload`
-FROM engagement_events_queue;
+SELECT
+    JSONExtractInt(after, 'id') as id,
+    JSONExtractString(after, 'content_id') as content_id,
+    JSONExtractString(after, 'user_id') as user_id,
+    JSONExtractString(after, 'event_type') as event_type,
+    JSONExtractString(after, 'event_ts') as event_ts,
+    JSONExtractInt(after, 'duration_ms') as duration_ms,
+    JSONExtractString(after, 'device') as device,
+    JSONExtractString(after, 'raw_payload') as raw_payload,
+    op,
+    ts_ms
+FROM engagement_events_queue
 '''
 
 # Create landing table for engagement events
 CREATE_ENGAGEMENT_EVENTS_LANDING_TABLE = '''
 CREATE TABLE IF NOT EXISTS engagement_events (
-    `__op` String,
-    `__ts_ms` UInt64,
-    `__source` String,
-    `__ts` String,
-    `id` String,
-    `content_id` String,
-    `user_id` String,
-    `event_type` String,
-    `event_ts` String,
-    `duration_ms` Nullable(Int32),
-    `device` String,
-    `raw_payload` String
+    id Int32,
+    content_id UUID,
+    user_id UUID,
+    event_type String,
+    event_ts String,
+    duration_ms Nullable(Int32),
+    device Nullable(String),
+    raw_payload Nullable(String),
+    op String,
+    ts_ms UInt64
 ) ENGINE = MergeTree()
-ORDER BY (`id`, `__ts_ms`);
+ORDER BY (`content_id`) PRIMARY KEY (`content_id`);
 '''
 
 def execute_all():

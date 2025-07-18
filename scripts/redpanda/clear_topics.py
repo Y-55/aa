@@ -18,7 +18,7 @@ def clear_topics():
     topics = admin_client.list_topics()
     print(topics)
     for topic in topics:
-        if topic.startswith('pg'):
+        if topic.startswith('pg') or topic.startswith('ch'):
             print(f"Deleting topic: {topic}")
             admin_client.delete_topics([topic])
             print(f"Deleted topic: {topic}")
