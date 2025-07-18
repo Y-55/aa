@@ -1,12 +1,15 @@
 import os
 import psycopg2
+from dotenv import load_dotenv
 from psycopg2.extras import execute_batch
 
-DB_HOST = os.getenv('POSTGRES_HOST', 'localhost')
-DB_PORT = os.getenv('POSTGRES_PORT', '5432')
-DB_NAME = os.getenv('POSTGRES_DB', 'postgres')
-DB_USER = os.getenv('POSTGRES_USER', 'admin')
-DB_PASSWORD = os.getenv('POSTGRES_PASSWORD', 'password')
+load_dotenv()
+
+DB_HOST = os.getenv('POSTGRES_HOST')
+DB_PORT = os.getenv('POSTGRES_PORT')
+DB_NAME = os.getenv('POSTGRES_DB')
+DB_USER = os.getenv('POSTGRES_USER')
+DB_PASSWORD = os.getenv('POSTGRES_PASSWORD')
 
 CREATE_CONTENT_TABLE = '''
 CREATE TABLE IF NOT EXISTS content (
