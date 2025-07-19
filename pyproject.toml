@@ -16,6 +16,7 @@ psycopg2-binary = "^2.9.9"
 tqdm = "^4.66.2"
 python-dotenv = "^1.0.0"
 clickhouse-connect = "^0.8.18"
+redis = "^6.2.0"
 
 [build-system]
 requires = ["poetry-core"]
