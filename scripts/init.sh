@@ -10,4 +10,7 @@ poetry run python scripts/clickhouse/init_landing_tables.py
 echo "Initializing ClickHouse Kafka Transformation..."
 poetry run python scripts/clickhouse/kafka_transformation.py
 
+echo "Initializing Redis Connect..."
+poetry run python scripts/redpanda/init_redis_connect.py
+
 echo "Done"

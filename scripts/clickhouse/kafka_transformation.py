@@ -57,6 +57,7 @@ LEFT JOIN content ON engagement_events.content_id = content.id
 CREATE_CONTENT_TRANSFORM_QUEUE_MV = '''
 CREATE MATERIALIZED VIEW IF NOT EXISTS content_engagement_transformed_queue_mv TO content_engagement_transformed_queue AS
 SELECT
+    engagement_id as _key,
     engagement_id,
     user_id,
     event_type,
@@ -76,6 +77,7 @@ FROM content_engagement_transformed
 
 CREATE_KAFKA_SOURCE_TABLE = '''
 CREATE TABLE IF NOT EXISTS content_engagement_transformed_queue (
+    _key String,
     engagement_id UInt64,
     user_id UUID,
     event_type String,
@@ -119,4 +121,5 @@ def execute_all():
     print("All ClickHouse tables created successfully!")
         
 if __name__ == "__main__":
+    execute_all()
     execute_all()
