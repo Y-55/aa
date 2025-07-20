@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS content_engagement_transformed (
     content_type String,
     length_seconds UInt32,
     engagement_seconds UInt32,
-    engagment_pct Float32,
+    engagment_pct Nullable(Float32),
     ingest_from_kafka_ts DateTime64(3),
     transform_ts DateTime64(3),
     ts_diff UInt64
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS content_engagement_transformed_queue (
     content_type String,
     length_seconds UInt32,
     engagement_seconds UInt32,
-    engagment_pct Float32,
+    engagment_pct Nullable(Float32),
     ingest_from_kafka_ts DateTime64(3),
     transform_ts DateTime64(3),
     ts_diff UInt64

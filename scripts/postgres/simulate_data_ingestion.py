@@ -64,7 +64,7 @@ def simulate_data_ingestion(n_content, n_events, n_pause_time_seconds, simulatio
             'content_id': [random.choice(content_ids) for _ in range(n_events)],
             'user_id': [random.choice(user_ids) for _ in range(n_events)],
             'event_type': [random.choice(event_types) for _ in range(n_events)],
-            'event_ts': [now - timedelta(minutes=random.randint(0, 10000)) for _ in range(n_events)],
+            'event_ts': [now for _ in range(n_events)],
             'duration_ms': [random.choice([None, random.randint(100, 10000)]) for _ in range(n_events)],
             'device': [random.choice(devices) for _ in range(n_events)],
             'raw_payload': [None for _ in range(n_events)]
