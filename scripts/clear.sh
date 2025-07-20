@@ -16,4 +16,11 @@ poetry run python scripts/clickhouse/clear_db.py
 echo "Clearing Redis..."
 poetry run python scripts/redis/clear_redis.py
 
+echo "Clearing Kafka Streams App..."
+PID=$(ps aux | grep "com.thmanyah.App" | grep -v grep | awk '{print $2}')
+if [ -n "$PID" ]; then
+    kill $PID
+    kill -9 $PID
+fi
+
 echo "Done"
