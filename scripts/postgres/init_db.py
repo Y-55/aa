@@ -35,6 +35,15 @@ CREATE TABLE IF NOT EXISTS engagement_events (
 );
 '''
 
+CREATE_SIGNALING_TABLE = '''
+CREATE TABLE IF NOT EXISTS debezium_signals (
+    id VARCHAR(255) PRIMARY KEY,
+    type VARCHAR(255) NOT NULL,
+    data TEXT
+);
+'''
+
+
 def execute_all():
     conn = psycopg2.connect(
         host=DB_HOST,
@@ -47,7 +56,8 @@ def execute_all():
     with conn.cursor() as cur:
         cur.execute(CREATE_CONTENT_TABLE)
         cur.execute(CREATE_ENGAGEMENT_EVENTS_TABLE)
-    print("Tables 'content' and 'engagement_events' created or already exist.")
+        cur.execute(CREATE_SIGNALING_TABLE)
+    print("Tables 'content', 'engagement_events', and 'signaling' created or already exist.")
     conn.close()
 
 if __name__ == "__main__":
