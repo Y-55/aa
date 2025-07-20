@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def clear_redis():
-    """Clear all data from Redis using FLUSHALL command"""
+    """Clear all data from Redis using FLUSHALL command and drop indexes"""
     
     # Get Redis connection details from environment or use defaults
     REDIS_HOST = os.getenv('REDIS_HOST')
@@ -15,6 +15,17 @@ def clear_redis():
         r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
         r.ping()
         
+        # Drop the content engagement index if it exists
+        try:
+            r.execute_command("FT.DROPINDEX", "idx:content_engagement_time")
+            print("✅ Successfully dropped content engagement index")
+        except redis.exceptions.ResponseError as e:
+            if "Unknown index name" in str(e):
+                print("ℹ️  Content engagement index does not exist (already dropped)")
+            else:
+                print(f"⚠️  Error dropping index: {e}")
+        
+        # Clear all data
         result = r.flushall()
         
         if result:
