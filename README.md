@@ -1,6 +1,10 @@
 # Thmanyah Assessment
 
 ## 🎯 My Solution Overview
+
+Watch this [vedio overview](https://www.loom.com/share/1fda57354a02417c9fe602253be58625?sid=f1d7de6e-ab22-41e2-b2b1-40d70ba89fd0) 
+
+
 حاولت اكتب عربي هنا عشان اصيد جوكم، بس والله ما عرفت كيف انسقه، صعب جدا وراح ياخذ وقت كثير، فخلاص بكتب انجليزي تحملوني دي المرة.
 
 The assessment consists of several sub-challenges. I'll list each one and walk through my solution independently. After that, I'll demonstrate how to run the project and dive into the technical details.
