@@ -25,14 +25,14 @@ def clear_db():
         result = client.query("SHOW TABLES FROM default")
         tables = [row[0] for row in result.result_rows]
         
-        print(f"Found {len(tables)} tables in default database")
+        print(f"Found Clickhouse {len(tables)} tables in default database")
         
         # Drop each table
         for table in tables:
-            print(f"Dropping table: {table}")
+            print(f"Dropping Clickhouse table: {table}")
             client.command(f"DROP TABLE IF EXISTS default.{table}")
             
-        print("All tables in default database have been cleared")
+        print("All Clickhouse tables in default database have been cleared")
         
     except Exception as e:
         print(f"Error clearing database: {e}")
