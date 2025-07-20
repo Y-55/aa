@@ -160,8 +160,6 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
       POSTGRES_DB: postgres
-    # volumes:
-    #   - ${PROJECT_PATH}/volumes/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     command:
       - "postgres"
       - "-c"
@@ -185,9 +183,6 @@ services:
     volumes:
       - ./volumes/clickhouse/data:/var/lib/clickhouse
       - ./volumes/clickhouse/logs:/var/log/clickhouse-server
-      # - ./volumes/clickhouse/config:/etc/clickhouse-server
-      # - ${PROJECT_PATH}/volumes/clickhouse/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
-      # - ${PROJECT_PATH}/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
     ulimits:
       nproc: 65535
       nofile:
@@ -211,24 +206,24 @@ services:
       start_period: 5s
       timeout: 5s
 
-  kafka-streams-app:
-    build:
-      context: ./scripts/kafka_streams_app
-      dockerfile: Dockerfile
-    container_name: kafka-streams-app
-    hostname: kafka-streams-app
-    depends_on:
-      - redpanda-1
-    environment:
-      - KAFKA_BOOTSTRAP_SERVERS=redpanda-1:29092
-      - ENGAGEMENT_TOPIC=pg.public.engagement_events
-      - CONTENT_TOPIC=pg.public.content
-      - OUTPUT_TOPIC=ks.content_engagement_transformed
-    restart: unless-stopped
-    networks:
-      - internal_nw
-    volumes:
-      - ./scripts/kafka_streams_app/logs:/app/logs
+  # kafka-streams-app:
+  #   build:
+  #     context: ./scripts/kafka_streams_app
+  #     dockerfile: Dockerfile
+  #   container_name: kafka-streams-app
+  #   hostname: kafka-streams-app
+  #   depends_on:
+  #     - redpanda-1
+  #   environment:
+  #     - KAFKA_BOOTSTRAP_SERVERS=redpanda-1:29092
+  #     - ENGAGEMENT_TOPIC=pg.public.engagement_events
+  #     - CONTENT_TOPIC=pg.public.content
+  #     - OUTPUT_TOPIC=ks.content_engagement_transformed
+  #   restart: unless-stopped
+  #   networks:
+  #     - internal_nw
+  #   volumes:
+  #     - ./scripts/kafka_streams_app/logs:/app/logs
 
   management:
     build:
@@ -237,13 +232,19 @@ services:
     hostname: management
     depends_on:
       - redpanda-1
-      - connect
+      - connect-debezium
+      - connect-redis
       - postgres
       - clickhouse
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=redpanda-1:29092
+      - ENGAGEMENT_TOPIC=pg.public.engagement_events
+      - CONTENT_TOPIC=pg.public.content
+      - OUTPUT_TOPIC=ks.content_engagement_transformed
     volumes:
       - ./scripts:/app/scripts
       - ./.env:/app/.env
-      - ./connect-configs:/app/connect-configs
+      - ./configs:/app/configs
     restart: on-failure:3
     stdin_open: true
     tty: true
