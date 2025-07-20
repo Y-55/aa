@@ -16,11 +16,21 @@ def init_redis():
         print("✅ Connected to Redis successfully")
         
         # Create the content engagement index
-        index_command = """FT.CREATE idx:content_engagement_time ON JSON PREFIX 1 "ch.public.content_engagement_transformed:" SCHEMA $.content_type AS content_type TAG SORTABLE $.event_type AS event_type TAG SORTABLE $.event_ts AS event_ts TEXT SORTABLE $.engagement_seconds AS engagement_seconds NUMERIC SORTABLE $.duration_ms AS duration_ms NUMERIC SORTABLE"""
+        index_command = [
+            "FT.CREATE", "idx:content_engagement_time",
+            "ON", "JSON",
+            "PREFIX", "1", "ch.public.content_engagement_transformed:",
+            "SCHEMA",
+            "$.content_type", "AS", "content_type", "TAG", "SORTABLE",
+            "$.event_type", "AS", "event_type", "TAG", "SORTABLE", 
+            "$.event_ts", "AS", "event_ts", "TEXT", "SORTABLE",
+            "$.engagement_seconds", "AS", "engagement_seconds", "NUMERIC", "SORTABLE",
+            "$.duration_ms", "AS", "duration_ms", "NUMERIC", "SORTABLE"
+        ]
         
         try:
             # Execute the index creation command
-            result = r.execute_command(index_command)
+            result = r.execute_command(*index_command)
             print("✅ Content engagement index created successfully")
             print(f"Index creation result: {result}")
         except redis.exceptions.ResponseError as e:
