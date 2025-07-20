@@ -207,8 +207,39 @@ This generates realistic user interaction events and streams them through the en
 ```
 
 
-## Data Explainations 
+## Data Explanations
 
+### 📊 Kafka Topics
+
+| Topic Name | Purpose |
+|------------|---------|
+| `pg.public.content` | Captures all changes from PostgreSQL content table |
+| `pg.public.engagement_events` | Captures all user engagement events from PostgreSQL |
+| `ks.content_engagement_transformed` | Output topic from Kafka Streams with enriched data |
+| `ch.public.content_engagement_transformed` | Final enriched data coming from clickhouse and sinked to redis |
+| `connect-configs` | Stores Kafka Connect connector configurations |
+| `connect-offsets` | Tracks consumer group offsets for Kafka Connect |
+| `connect-status` | Stores connector and task status information |
+| `docker-connect-configs` | Redis connector configurations |
+| `docker-connect-offsets` | Redis connector consumer offsets |
+| `docker-connect-status` | Redis connector status information |
+| `engagement-enrichment-app-KSTREAM-FILTER-0000000007-repartition` | Internal Kafka Streams repartitioning topic |
+| `engagement-enrichment-app-KSTREAM-TOTABLE-STATE-STORE-0000000005-changelog` | Kafka Streams state store changelog |
+
+### 🗄️ ClickHouse Tables
+
+| Table Name | Purpose |
+|------------|---------|
+| `content` | Stores content metadata from PostgreSQL |
+| `engagement_events` | Stores raw user engagement events |
+| `content_engagement_transformed` | Final enriched dataset for analytics |
+| `content_queue` | Kafka consumer table for content data |
+| `engagement_events_queue` | Kafka consumer table for engagement events |
+| `content_engagement_transformed_queue` | Kafka producer table for enriched data to send it back to kafka ch.public.content_engagement_transformed |
+| `content_mv` | Materialized view to transform content data |
+| `engagement_events_mv` | Materialized view to transform engagement data |
+| `content_engagement_transformed_content_mv` | Materialized view for real-time joins and enrichment |
+| `content_engagement_transformed_queue_mv` | Materialized view to push data to content_engagement_transformed_queue |
 
 ## 🚀 Additional Scripts
 
