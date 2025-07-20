@@ -207,9 +207,15 @@ This generates realistic user interaction events and streams them through the en
 ```
 
 
+## Data Explainations 
+
+
 ## 🚀 Additional Scripts
 
 ### **Redis Queries (`scripts/redis/queries.py`)**
+```bash
+python run scripts/redis/queries.py
+```
 This script executes a specific Redis Search aggregation query:
 - Queries the `idx:content_engagement_time` index
 - Groups data by content type
@@ -218,6 +224,9 @@ This script executes a specific Redis Search aggregation query:
 - Used to get the required analytics query results (معرفة المحتويات الأكثر تفاعلًا في آخر عشر دقائق)
 
 ### **Debezium Signals (`scripts/postgres/insert_debezium_signals.py`)**
+```bash
+python run scripts/postgres/insert_debezium_signals.py
+```
 This is the backfilling logic. Debezium provides a way to trigger a snapshot, which essentially lets you send a signal to initiate the process. This signal can be configured to come from Kafka, a database table, or other sources. In my case, I used a database table. This script inserts a snapshot signal into that table, instructing Debezium to backfill the data.
 
 
