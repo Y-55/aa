@@ -207,7 +207,10 @@ This generates realistic user interaction events and streams them through the en
 ```
 
 
-## Data Explainations 
+## Data Explainations
+<img width="2912" height="1418" alt="Arc 2025-07-21 00 35 59" src="https://github.com/user-attachments/assets/526413f3-f573-4679-a02c-6e97982ed122" />
+<img width="774" height="530" alt="CleanShot 2025-07-21 at 00 36 53@2x" src="https://github.com/user-attachments/assets/78f68855-8de7-4d22-be26-555ee63ff623" />
+
 
 
 ## 🚀 Additional Scripts
