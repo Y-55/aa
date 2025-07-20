@@ -25,6 +25,8 @@
         "tombstones.on.delete": "false",
         "decimal.handling.mode": "double",
         "key.columns": "id",
-        "key.columns.with.value.fields": "id"
+        "key.columns.with.value.fields": "id",
+
+        "signal.data.collection": "public.debezium_signals"
     }
 }
