@@ -1,4 +1,4 @@
-# Thmanyah Assessment
+# Assessment
 
 ## 🎯 My Solution Overview
 
