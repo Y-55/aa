@@ -21,7 +21,7 @@ But first, here’s a quick overview of the data stack I chose:
 
 
 #### 📊 Architecture Overview
-
+<img width="3590" height="1404" alt="Arc 2025-07-20 21 56 46" src="https://github.com/user-attachments/assets/a41afec5-08f8-4720-b4fe-f1091a1aa745" />
 
 #### 🏗️ Challenges Walk Through
 
@@ -43,7 +43,6 @@ But first, here’s a quick overview of the data stack I chose:
 
 
 ## 📊 Key Components I Built
-<img width="3590" height="1404" alt="Arc 2025-07-20 21 56 46" src="https://github.com/user-attachments/assets/a41afec5-08f8-4720-b4fe-f1091a1aa745" />
 
 ### **Complete Project Structure**
 ```
