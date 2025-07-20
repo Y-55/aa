@@ -2,6 +2,7 @@
 
 ## 🎯 My Solution Overview
 حاولت اكتب عربي هنا عشان اصيد جوكم، بس والله ما عرفت كيف انسقه، صعب جدا وراح ياخذ وقت كثير، فخلاص بكتب انجليزي تحملوني دي المرة.
+
 The assessment consists of several sub-challenges. I'll list each one and walk through my solution independently. After that, I'll demonstrate how to run the project and dive into the technical details.
 
 But first, here’s a quick overview of the data stack I chose:
@@ -42,6 +43,7 @@ But first, here’s a quick overview of the data stack I chose:
 
 
 ## 📊 Key Components I Built
+<img width="3590" height="1404" alt="Arc 2025-07-20 21 56 46" src="https://github.com/user-attachments/assets/a41afec5-08f8-4720-b4fe-f1091a1aa745" />
 
 ### **Complete Project Structure**
 ```
