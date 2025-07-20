@@ -20,7 +20,7 @@ echo "Running simulate..."
 poetry run python scripts/postgres/simulate_data_ingestion.py 1 100 5 10
 
 echo "Initializing Kafka Streams App..."
-cd scripts/kafka_streams_app
+cd kafka_streams_app
 nohup java -jar target/kafka_streams_app-1.0-SNAPSHOT.jar > /dev/null 2>&1 &
 # java -jar target/kafka_streams_app-1.0-SNAPSHOT.jar
 

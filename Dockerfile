@@ -26,9 +26,10 @@ ENV PYTHONPATH="/app:$PYTHONPATH"
 WORKDIR /app
 
 COPY ./pyproject.toml /app/pyproject.toml
-COPY ./scripts/kafka_streams_app /app/scripts/kafka_streams_app
+COPY ./scripts/kafka_streams_app /app/kafka_streams_app
 
-WORKDIR /app/scripts/kafka_streams_app
+
+WORKDIR /app/kafka_streams_app
 RUN mvn clean package -DskipTests
 
 WORKDIR /app
