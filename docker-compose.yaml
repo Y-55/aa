@@ -211,24 +211,41 @@ services:
       start_period: 5s
       timeout: 5s
 
+  kafka-streams-app:
+    build:
+      context: ./scripts/kafka_streams_app
+      dockerfile: Dockerfile
+    container_name: kafka-streams-app
+    hostname: kafka-streams-app
+    depends_on:
+      - redpanda-1
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=redpanda-1:29092
+      - ENGAGEMENT_TOPIC=pg.public.engagement_events
+      - CONTENT_TOPIC=pg.public.content
+      - OUTPUT_TOPIC=ks.content_engagement_transformed
+    restart: unless-stopped
+    networks:
+      - internal_nw
+    volumes:
+      - ./scripts/kafka_streams_app/logs:/app/logs
 
-  # management:
-  #   build:
-  #     context: .
-  #   command: tail -f /dev/null
-  #   hostname: management
-  #   depends_on:
-  #     - redpanda-1
-  #     - connect
-  #     - postgres
-  #     - clickhouse
-  #   volumes:
-  #     - ./prc:/app/prc
-  #     - ./scripts:/app/scripts
-  #     - ./.env:/app/.env
-  #     - ./connect-configs:/app/connect-configs
-  #   restart: on-failure:3
-  #   stdin_open: true
-  #   tty: true
-  #   networks:
-  #     - internal_nw
+  management:
+    build:
+      context: .
+    command: tail -f /dev/null
+    hostname: management
+    depends_on:
+      - redpanda-1
+      - connect
+      - postgres
+      - clickhouse
+    volumes:
+      - ./scripts:/app/scripts
+      - ./.env:/app/.env
+      - ./connect-configs:/app/connect-configs
+    restart: on-failure:3
+    stdin_open: true
+    tty: true
+    networks:
+      - internal_nw
